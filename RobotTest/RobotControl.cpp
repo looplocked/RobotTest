@@ -112,7 +112,7 @@ void RobotControl::getEndEffectorPose(std::vector<float>& result)
 	result.clear();
 	result.resize(6);
 	int len = sizeof(SOCKADDR);
-	recvfrom(socketClient, recvBuf, 1044, 0, (SOCKADDR *)&addrSrv, &len);
+	recvfrom(socketClient, recvBuf, 1108, 0, (SOCKADDR *)&addrSrv, &len);
 	char sendBuf[55] = { '0' };
 	//机器人末端位姿
 	for (int i = 0; i < 6; i++)
@@ -125,7 +125,7 @@ void RobotControl::getJointAngle(std::vector<float>& result)
 	result.clear();
 	result.resize(6);
 	int len = sizeof(SOCKADDR);
-	recvfrom(socketClient, recvBuf, 4096, 0, (SOCKADDR *)&addrSrv, &len);
+	recvfrom(socketClient, recvBuf, 1108, 0, (SOCKADDR *)&addrSrv, &len);
 	char sendBuf[55] = { '0' };
 	//机器人末端位姿
 	for (int i = 0; i < 6; i++)
@@ -142,17 +142,17 @@ void  RobotControl::movel(vector<float>& pose, float speed, float a)
 	sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
 }
 
-void  RobotControl::movej(vector<double>& pose, float speed, float a)
+void  RobotControl::movej(vector<float>& pose, float speed, float a)
 {
 	int len = sizeof(SOCKADDR);
 	const char* sendBuf;
-	//string command = "movej([" + floatToString((float)pose[0]) + "," + floatToString((float)pose[1]) + "," + floatToString(pose[2]) + "," + floatToString(pose[3]) + "," + floatToString(pose[4]) + "," + floatToString(pose[5]) + "],a = " + floatToString(a) + ", v = " + floatToString(speed) + ")\n";
-	string command = "movej([" + to_string(pose[0]) + ","\
-		+ to_string(pose[1]) + "," + to_string(pose[2]) + ","\
-		+ to_string(pose[3]) + "," + to_string(pose[4]) + ","\
-		+ to_string(pose[5]) + "],a = " + to_string(a) + ", v = " + floatToString(speed) + ")\n";
+	string command = "movej([" + floatToString((float)pose[0]) + "," + floatToString((float)pose[1]) + "," + floatToString(pose[2]) + "," + floatToString(pose[3]) + "," + floatToString(pose[4]) + "," + floatToString(pose[5]) + "],a=" + floatToString(a) + ",v=" + floatToString(speed) +  ")\n";
+	//string command = "movej([" + floatToString((float)pose[0]) + "," + floatToString((float)pose[1]) + "," + floatToString(pose[2]) + "," + floatToString(pose[3]) + "," + floatToString(pose[4]) + "," + floatToString(pose[5]) + "]" + ")\n";
 	sendBuf = command.c_str();
-	sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
+	int state = sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
+	//int state = send(socketClient, sendBuf, strlen(sendBuf) + 1, 0);
+	printLog("move to " + command);
+	printLog("the sent state is " + to_string(state) + ", " + "the sent data length is" + to_string(strlen(sendBuf)));
 }
 
 void  RobotControl::IOControl(bool openFlag)
@@ -221,7 +221,7 @@ bool RobotControl::IsMoving(float threshNum)
 {
 	int len = sizeof(SOCKADDR);
 	char sendBuf[55] = { '0' };
-	recvfrom(socketClient, recvBuf, 1044, 0, (SOCKADDR *)&addrSrv, &len);
+	recvfrom(socketClient, recvBuf, 1108, 0, (SOCKADDR *)&addrSrv, &len);
 	for (int i = 0; i < 6; i++)
 	{
 		if (abs(*(JointSpeed(recvBuf) + i)) > threshNum)
@@ -288,4 +288,20 @@ void RobotControl::route(vector<vector<float>> Route_points, float speed, float 
 	}
 	sendBuf = command.c_str();
 	sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
+}
+
+void RobotControl::printLog(string log) {
+	ofstream fout;
+	SYSTEMTIME sys;
+	::GetLocalTime(&sys);
+
+	fout.open("log.txt", ios_base::in | ios_base::app);
+	fout << "[" << sys.wHour << ":" << sys.wMinute << ":" << sys.wSecond << "." << sys.wMilliseconds << "]\t" << log << endl;
+	fout.close();
+}
+
+void RobotControl::deleteLog() {
+	ofstream fout;
+	fout.open("log.txt", ofstream::out | ofstream::trunc);
+	fout.close();
 }

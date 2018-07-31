@@ -4,6 +4,7 @@
 #include <string>
 #include <iterator>
 #include <iostream>
+#include <fstream>
 
 #pragma comment(lib,"ws2_32.lib")
 
@@ -12,10 +13,11 @@ using namespace std;
 int main()
 {
 	RobotControl robot;
+	robot.deleteLog();
 	robot.initial();
 	bool forward = true;
-	vector<double> pose1{ 3.327548, - 2.121084, - 1.349550, - 1.186976, 1.532444, 0.921528 };
-	vector<double> pose2{ 3.357548, -2.121084, -1.349550, -1.186976, 1.532444, 0.921528 };
+	vector<float> pose1{ float(2.32), float(-2.12), float(-1.34), float(-1.18), float(1.53), float(0.92) };
+	vector<float> pose2{ float(3.39), float(-2.12), float(-1.34), float(-1.18), float(1.53), float(0.92) };
 	while (true)
 	{
 		vector<float> pose;
@@ -33,6 +35,7 @@ int main()
 		copy(pose.begin(), pose.end(), ostream_iterator<float>(posestream, ", "));
 		string posestr = posestream.str();
 		cout << posestr << endl;
-		Sleep(1000);
+		Sleep(3000);
+		//break;
 	}
 }

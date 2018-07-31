@@ -12,6 +12,7 @@
 #include <sstream>
 #include <iostream>
 #include <conio.h>
+#include <fstream>
 
 
 using namespace std;
@@ -29,7 +30,7 @@ public:
 	void getEndEffectorPose(std::vector<float>& result);
 	void getJointAngle(std::vector<float>& result);
 	void movel(vector<float>& pose, float speed, float a);
-	void movej(vector<double>& pose, float speed=1.05, float a=1.4);
+	void movej(vector<float>& pose, float speed=1.05, float a=1.4);
 	void IOControl(bool openFlag);
 	void DigitalOut(int port, bool openFlag);
 	void Stop();
@@ -38,13 +39,15 @@ public:
 	bool IsMoving(float threshNum);
 	bool isReachedT(vector<float>& target, float threshold_P, float threshold_O);
 	bool isReachedJ(vector<float>& target, float threshold);
+	void deleteLog();
 
 private:
 	string floatToString(float input);
 	string intToString(int input);
 	void close();
 	void route(vector<vector<float>> Route_points, float speed, float ac);
-
+	void printLog(string);
+	
 
 
 	SOCKET socketClient;
