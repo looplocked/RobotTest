@@ -35,7 +35,8 @@ void  RobotControl::initial()
 	//hThread1 = CreateThread(NULL, 0, threadFun, NULL, 0, NULL);
 
 	//客户端初始化
-	socketClient = socket(AF_INET, SOCK_DGRAM, 0);
+	//socketClient = socket(AF_INET, SOCK_DGRAM, 0);
+	socketClient = socket(AF_INET, SOCK_STREAM, 0);
 	addrSrv.sin_addr.S_un.S_addr = inet_addr("88.88.88.89");
 	//addrSrv.sin_addr.S_un.S_addr = inet_pton("88.88.88.89");//ip地址
 	addrSrv.sin_family = AF_INET;
@@ -90,6 +91,10 @@ double*  RobotControl::JointSpeed(char* data_recieved)
 //读取机器人关节速度
 double*  RobotControl::JointAngle(char* data_recieved)
 {
+	char* full_data = data_recieved;
+	char data_header[] = {char(0), char(0), char(4), char(84), '\0'};
+	char* new_header;
+	new_header = kmpSearch(full_data, data_header);
 	int ActualJointVelocities_StartAddress = 252;        //joint速度地址
 	BYTE temp[8];
 	double TCP_vector[6]; //返回的6个参数
@@ -98,7 +103,7 @@ double*  RobotControl::JointAngle(char* data_recieved)
 	{
 		for (int i = 0; i < 8; i++) //每个参数8个字节
 		{
-			temp[i] = *(data_recieved + ActualJointVelocities_StartAddress + 7 - i + 8 * j); //注意逆序
+			temp[i] = *(new_header + ActualJointVelocities_StartAddress + 7 - i + 8 * j); //注意逆序
 
 		}
 		memcpy(&TCP_vector[j], temp, sizeof(TCP_vector[j]));//字节数组转double
@@ -124,7 +129,7 @@ void RobotControl::getJointAngle(std::vector<float>& result)
 	result.clear();
 	result.resize(6);
 	int len = sizeof(SOCKADDR);
-	recvfrom(socketClient, recvBuf, 1044, 0, (SOCKADDR *)&addrSrv, &len);
+	recvfrom(socketClient, recvBuf, 4096, 0, (SOCKADDR *)&addrSrv, &len);
 	char sendBuf[55] = { '0' };
 	//机器人末端位姿
 	for (int i = 0; i < 6; i++)
@@ -283,4 +288,56 @@ void RobotControl::route(vector<vector<float>> Route_points, float speed, float 
 	}
 	sendBuf = command.c_str();
 	sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
+}
+
+void RobotControl::compute_next(char *s, int *next)
+{
+	int i = 0, len = strlen(s);
+	int k = 0;
+
+	next[0] = next[1] = 0;
+	for (i = 1; i < len; i++)
+	{
+		while (k > 0 && s[k] != s[i])
+			k = next[k];
+		if (s[k] == s[i])
+			k++;
+		next[i + 1] = k;
+	}
+}
+
+char *RobotControl::kmpSearch(char *s, char *t)
+{
+	int s_len, t_len, i, j = 0;
+	int *next = NULL;
+
+	if (!s || !t)
+		return NULL;
+
+	s_len = 4096;
+	t_len = 4;
+	if (t_len == 0)
+		return s;
+	next = (int *)malloc(sizeof(int) * (t_len + 1));
+	if (!next)
+		return NULL;
+
+	compute_next(t, next);
+
+	for (i = 0; i < s_len; i++)
+	{
+		while (j > 0 && s[i] != t[j])
+			j = next[j];
+		if (s[i] == t[j])
+			j++;
+		if (j == t_len)
+		{
+			//printf("match %d\n", i-j+1);
+			free(next);
+			return s + i - j + 1;
+		}
+	}
+
+	free(next);
+	return NULL;
 }

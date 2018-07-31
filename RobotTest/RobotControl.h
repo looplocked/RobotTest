@@ -42,8 +42,13 @@ public:
 private:
 	string floatToString(float input);
 	string intToString(int input);
+	void compute_next(char *s, int *next);
+	char *kmpSearch(char *s, char *t);
 	void close();
 	void route(vector<vector<float>> Route_points, float speed, float ac);
+
+
+
 	SOCKET socketClient;
 	sockaddr_in addrSrv;
 	char recvBuf[DATA_LENGTH];

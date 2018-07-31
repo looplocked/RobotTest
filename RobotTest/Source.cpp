@@ -21,6 +21,6 @@ int main()
 		copy(pose.begin(), pose.end(), ostream_iterator<float>(posestream, ", "));
 		string posestr = posestream.str();
 		cout << posestr << endl;
-		_sleep(300);
+		Sleep(300);
 	}
 }
