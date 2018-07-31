@@ -91,10 +91,6 @@ double*  RobotControl::JointSpeed(char* data_recieved)
 //读取机器人关节速度
 double*  RobotControl::JointAngle(char* data_recieved)
 {
-	char* full_data = data_recieved;
-	char data_header[] = {char(0), char(0), char(4), char(84), '\0'};
-	char* new_header;
-	new_header = kmpSearch(full_data, data_header);
 	int ActualJointVelocities_StartAddress = 252;        //joint速度地址
 	BYTE temp[8];
 	double TCP_vector[6]; //返回的6个参数
@@ -103,7 +99,7 @@ double*  RobotControl::JointAngle(char* data_recieved)
 	{
 		for (int i = 0; i < 8; i++) //每个参数8个字节
 		{
-			temp[i] = *(new_header + ActualJointVelocities_StartAddress + 7 - i + 8 * j); //注意逆序
+			temp[i] = *(data_recieved + ActualJointVelocities_StartAddress + 7 - i + 8 * j); //注意逆序
 
 		}
 		memcpy(&TCP_vector[j], temp, sizeof(TCP_vector[j]));//字节数组转double
@@ -146,11 +142,15 @@ void  RobotControl::movel(vector<float>& pose, float speed, float a)
 	sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
 }
 
-void  RobotControl::movej(vector<float>& pose, float speed, float a)
+void  RobotControl::movej(vector<double>& pose, float speed, float a)
 {
 	int len = sizeof(SOCKADDR);
 	const char* sendBuf;
-	string command = "movej([" + floatToString((float)pose[0]) + "," + floatToString((float)pose[1]) + "," + floatToString(pose[2]) + "," + floatToString(pose[3]) + "," + floatToString(pose[4]) + "," + floatToString(pose[5]) + "],a = " + floatToString(a) + ", v = " + floatToString(speed) + ")\n";
+	//string command = "movej([" + floatToString((float)pose[0]) + "," + floatToString((float)pose[1]) + "," + floatToString(pose[2]) + "," + floatToString(pose[3]) + "," + floatToString(pose[4]) + "," + floatToString(pose[5]) + "],a = " + floatToString(a) + ", v = " + floatToString(speed) + ")\n";
+	string command = "movej([" + to_string(pose[0]) + ","\
+		+ to_string(pose[1]) + "," + to_string(pose[2]) + ","\
+		+ to_string(pose[3]) + "," + to_string(pose[4]) + ","\
+		+ to_string(pose[5]) + "],a = " + to_string(a) + ", v = " + floatToString(speed) + ")\n";
 	sendBuf = command.c_str();
 	sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
 }
@@ -288,56 +288,4 @@ void RobotControl::route(vector<vector<float>> Route_points, float speed, float 
 	}
 	sendBuf = command.c_str();
 	sendto(socketClient, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR *)&addrSrv, len);
-}
-
-void RobotControl::compute_next(char *s, int *next)
-{
-	int i = 0, len = strlen(s);
-	int k = 0;
-
-	next[0] = next[1] = 0;
-	for (i = 1; i < len; i++)
-	{
-		while (k > 0 && s[k] != s[i])
-			k = next[k];
-		if (s[k] == s[i])
-			k++;
-		next[i + 1] = k;
-	}
-}
-
-char *RobotControl::kmpSearch(char *s, char *t)
-{
-	int s_len, t_len, i, j = 0;
-	int *next = NULL;
-
-	if (!s || !t)
-		return NULL;
-
-	s_len = 4096;
-	t_len = 4;
-	if (t_len == 0)
-		return s;
-	next = (int *)malloc(sizeof(int) * (t_len + 1));
-	if (!next)
-		return NULL;
-
-	compute_next(t, next);
-
-	for (i = 0; i < s_len; i++)
-	{
-		while (j > 0 && s[i] != t[j])
-			j = next[j];
-		if (s[i] == t[j])
-			j++;
-		if (j == t_len)
-		{
-			//printf("match %d\n", i-j+1);
-			free(next);
-			return s + i - j + 1;
-		}
-	}
-
-	free(next);
-	return NULL;
 }

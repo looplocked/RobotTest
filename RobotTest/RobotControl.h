@@ -29,7 +29,7 @@ public:
 	void getEndEffectorPose(std::vector<float>& result);
 	void getJointAngle(std::vector<float>& result);
 	void movel(vector<float>& pose, float speed, float a);
-	void movej(vector<float>& pose, float speed, float a);
+	void movej(vector<double>& pose, float speed=1.05, float a=1.4);
 	void IOControl(bool openFlag);
 	void DigitalOut(int port, bool openFlag);
 	void Stop();
@@ -42,8 +42,6 @@ public:
 private:
 	string floatToString(float input);
 	string intToString(int input);
-	void compute_next(char *s, int *next);
-	char *kmpSearch(char *s, char *t);
 	void close();
 	void route(vector<vector<float>> Route_points, float speed, float ac);
 

@@ -1,11 +1,3 @@
-﻿  RobotControl.cpp
-e:\visual_servoing\robottest\robottest\robotcontrol.cpp(123): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\visual_servoing\robottest\robottest\robotcontrol.cpp(136): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\visual_servoing\robottest\robottest\robotcontrol.cpp(278): warning C4018: '<': signed/unsigned mismatch
-e:\visual_servoing\robottest\robottest\robotcontrol.cpp(280): warning C4018: '<': signed/unsigned mismatch
-e:\visual_servoing\robottest\robottest\robotcontrol.cpp(69): warning C4172: returning address of local variable or temporary: TCP_vector
-e:\visual_servoing\robottest\robottest\robotcontrol.cpp(88): warning C4172: returning address of local variable or temporary: TCP_vector
-e:\visual_servoing\robottest\robottest\robotcontrol.cpp(111): warning C4172: returning address of local variable or temporary: TCP_vector
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+﻿  Source.cpp
   RobotTest.vcxproj -> E:\visual_servoing\RobotTest\Debug\RobotTest.exe
   RobotTest.vcxproj -> E:\visual_servoing\RobotTest\Debug\RobotTest.pdb (Partial PDB)
