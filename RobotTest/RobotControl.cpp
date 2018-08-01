@@ -46,11 +46,11 @@ void poseReadThread()
 			}
 			memcpy(&TCP_vector[j], temp, sizeof(TCP_vector[j]));//字节数组转double
 		}
-		if (mtx.try_lock())
-			for (int i = 0; i < 6; i++) {
+		if (mtx.try_lock()) {
+			for (int i = 0; i < 6; i++)
 				globalPose[i] = *(TCP_vector + i);
-				mtx.unlock();
-			}
+			mtx.unlock();
+		}
 	}
 }
 
