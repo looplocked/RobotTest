@@ -2,7 +2,7 @@
 #ifndef ROBOTCONTROL_H
 #define ROBOTCONTROL_H
 
-#define DATA_LENGTH 1044
+#define DATA_LENGTH 1108
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #include <WinSock2.h>
@@ -40,16 +40,14 @@ public:
 	bool isReachedT(vector<float>& target, float threshold_P, float threshold_O);
 	bool isReachedJ(vector<float>& target, float threshold);
 	void deleteLog();
+	void printLog(string);
 
 private:
 	string floatToString(float input);
 	string intToString(int input);
 	void close();
 	void route(vector<vector<float>> Route_points, float speed, float ac);
-	void printLog(string);
 	
-
-
 	SOCKET socketClient;
 	sockaddr_in addrSrv;
 	char recvBuf[DATA_LENGTH];
