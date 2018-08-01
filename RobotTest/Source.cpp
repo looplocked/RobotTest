@@ -17,9 +17,9 @@ int main()
 	robot.initial();
 	Sleep(100);
 	bool forward = false;
-	vector<float> pose1{ float(3.22), float(-2.12), float(-1.34), float(-1.18), float(1.53), float(0.92) };
-	vector<float> pose2{ float(3.39), float(-2.12), float(-1.34), float(-1.18), float(1.53), float(0.92) };
-	vector<float> pose;
+	vector<double> pose1{ 3.22, -2.12, -1.34, -1.18, 1.53, 0.92 };
+	vector<double> pose2{ 3.39, -2.12, -1.34, -1.18, 1.53, 0.92 };
+	vector<double> pose;
 	while (true)
 	{
 		/*if (forward) {
@@ -32,7 +32,7 @@ int main()
 		}*/
 		//Sleep(200);
 		robot.printLog("tic");
-		robot.getJointAngle(pose);
+		pose = robot.getJointAngle();
 		robot.printLog("toc");
 		stringstream posestream;
 		copy(pose.begin(), pose.end(), ostream_iterator<float>(posestream, ", "));

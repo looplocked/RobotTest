@@ -13,9 +13,22 @@
 #include <iostream>
 #include <conio.h>
 #include <fstream>
+#include <thread>
+#include <mutex>
+
+using std::vector;
+using std::string;
+using std::cout;
+using std::endl;
+using std::to_string;
+using std::stringstream;
+using std::ofstream;
+using std::thread;
+using std::mutex;
 
 
-using namespace std;
+
+void poseReadThread();
 
 
 class RobotControl
@@ -24,33 +37,20 @@ public:
 	RobotControl();
 	~RobotControl();
 	void initial();
-	double* Tool_vector_actual(char* data_received);
-	double* JointSpeed(char* data_recieved);
-	double*  JointAngle(char* data_recieved);
-	void getEndEffectorPose(std::vector<float>& result);
-	void getJointAngle(std::vector<float>& result);
-	void movel(vector<float>& pose, float speed, float a);
-	void movej(vector<float>& pose, float speed=1.05, float a=1.4);
-	void IOControl(bool openFlag);
-	void DigitalOut(int port, bool openFlag);
+	vector<double> getJointAngle();
+	void movej(vector<double>& pose, double speed=1.05, double a=1.4);
 	void Stop();
-	void moveDownAndUp(vector<float>& pose, float dist, float speed);
-	void moveX(vector<float>& pose, float dist, float speed);
-	bool IsMoving(float threshNum);
-	bool isReachedT(vector<float>& target, float threshold_P, float threshold_O);
-	bool isReachedJ(vector<float>& target, float threshold);
+	bool isReachedJ(vector<double>& target, double threshold);
 	void deleteLog();
 	void printLog(string);
 
 private:
-	string floatToString(float input);
+	string doubleToString(double input);
 	string intToString(int input);
 	void close();
-	void route(vector<vector<float>> Route_points, float speed, float ac);
 	
 	SOCKET socketClient;
 	sockaddr_in addrSrv;
-	char recvBuf[DATA_LENGTH];
 };
 
 

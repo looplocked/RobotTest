@@ -1,21 +1,39 @@
-﻿Build started 2018/8/1 9:20:32.
-     1>Project "E:\visualservoing\RobotTest\RobotTest\RobotTest.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         D:\vs2015\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt RobotControl.cpp
-         RobotControl.cpp
-     1>e:\visualservoing\robottest\robottest\robotcontrol.cpp(118): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>e:\visualservoing\robottest\robottest\robotcontrol.cpp(132): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>e:\visualservoing\robottest\robottest\robotcontrol.cpp(280): warning C4018: '<': signed/unsigned mismatch
-     1>e:\visualservoing\robottest\robottest\robotcontrol.cpp(282): warning C4018: '<': signed/unsigned mismatch
-     1>e:\visualservoing\robottest\robottest\robotcontrol.cpp(68): warning C4172: returning address of local variable or temporary: TCP_vector
-     1>e:\visualservoing\robottest\robottest\robotcontrol.cpp(87): warning C4172: returning address of local variable or temporary: TCP_vector
-     1>e:\visualservoing\robottest\robottest\robotcontrol.cpp(106): warning C4172: returning address of local variable or temporary: TCP_vector
-       Link:
-         D:\vs2015\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\visualservoing\RobotTest\Debug\RobotTest.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"E:\visualservoing\RobotTest\Debug\RobotTest.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\visualservoing\RobotTest\Debug\RobotTest.lib" /MACHINE:X86 Debug\RobotControl.obj
-         Debug\Source.obj
-         RobotTest.vcxproj -> E:\visualservoing\RobotTest\Debug\RobotTest.exe
-     1>Done Building Project "E:\visualservoing\RobotTest\RobotTest\RobotTest.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:01.69
+﻿  RobotControl.cpp
+  Generating Code...
+  Compiling...
+  Source.cpp
+d:\vs2015\vc\include\xutility(2316): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+  d:\vs2015\vc\include\xutility(2335): note: see reference to function template instantiation '_OutIt std::_Copy_unchecked1<_InIt,_OutIt>(_InIt,_InIt,_OutIt,std::_General_ptr_iterator_tag)' being compiled
+          with
+          [
+              _OutIt=std::ostream_iterator<float,char,std::char_traits<char>>,
+              _InIt=double *
+          ]
+  d:\vs2015\vc\include\xutility(2344): note: see reference to function template instantiation '_OutIt std::_Copy_unchecked<_InIt,_Iter>(_InIt,_InIt,_OutIt)' being compiled
+          with
+          [
+              _OutIt=std::ostream_iterator<float,char,std::char_traits<char>>,
+              _InIt=double *,
+              _Iter=std::ostream_iterator<float,char,std::char_traits<char>>
+          ]
+  d:\vs2015\vc\include\xutility(2364): note: see reference to function template instantiation '_OutIt std::_Copy_no_deprecate1<double*,_OutIt>(_InIt,_InIt,_OutIt,std::input_iterator_tag,std::_Any_tag)' being compiled
+          with
+          [
+              _OutIt=std::ostream_iterator<float,char,std::char_traits<char>>,
+              _InIt=double *
+          ]
+  d:\vs2015\vc\include\xutility(2373): note: see reference to function template instantiation '_OutIt std::_Copy_no_deprecate<_InIt,_OutIt>(_InIt,_InIt,_OutIt)' being compiled
+          with
+          [
+              _OutIt=std::ostream_iterator<float,char,std::char_traits<char>>,
+              _InIt=std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>
+          ]
+  e:\visual_servoing\robottest\robottest\source.cpp(38): note: see reference to function template instantiation '_OutIt std::copy<std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>,std::ostream_iterator<float,char,std::char_traits<char>>>(_InIt,_InIt,_OutIt)' being compiled
+          with
+          [
+              _OutIt=std::ostream_iterator<float,char,std::char_traits<char>>,
+              _InIt=std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>
+          ]
+  Generating Code...
+  RobotTest.vcxproj -> E:\visual_servoing\RobotTest\Debug\RobotTest.exe
+  RobotTest.vcxproj -> E:\visual_servoing\RobotTest\Debug\RobotTest.pdb (Partial PDB)
