@@ -27,10 +27,6 @@ using std::thread;
 using std::mutex;
 
 
-
-void poseReadThread();
-
-
 class RobotControl
 {
 public:
@@ -47,7 +43,11 @@ public:
 private:
 	string doubleToString(double input);
 	string intToString(int input);
+	void poseReadThread();
 	void close();
+
+	vector<double> globalPose;
+	mutex mtx;
 	
 	SOCKET socketClient;
 	sockaddr_in addrSrv;
